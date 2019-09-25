@@ -6,6 +6,7 @@ import { device, func, gStyle } from './src/constants';
 
 // tab navigator
 import TabNavigator from './src/navigation/TabNavigator';
+import LoginScreen from './src/screens/LoginScreen';
 
 class App extends React.Component {
   constructor(props) {
@@ -13,7 +14,8 @@ class App extends React.Component {
 
     this.state = {
       isLoading: true,
-      theme: 'light'
+      theme: 'light',
+      isLogined: false
     };
 
     // is iPad?
@@ -45,7 +47,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { isLoading, theme } = this.state;
+    const { isLoading, theme, isLogined } = this.state;
     const iOSStatusType = theme === 'light' ? 'dark-content' : 'light-content';
 
     if (isLoading) {
@@ -60,13 +62,16 @@ class App extends React.Component {
     return (
       <View style={gStyle.container[theme]}>
         <StatusBar barStyle={device.iOS ? iOSStatusType : 'light-content'} />
-
-        <TabNavigator
-          screenProps={{
-            updateTheme: this.updateTheme
-          }}
-          theme={theme}
-        />
+        {isLogined ? (
+          <TabNavigator
+            screenProps={{
+              updateTheme: this.updateTheme
+            }}
+            theme={theme}
+          />
+        ) : (
+          <LoginScreen onFinish={() => this.setState({ isLogined: true })} />
+        )}
       </View>
     );
   }

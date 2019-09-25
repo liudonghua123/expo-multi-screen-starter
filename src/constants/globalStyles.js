@@ -63,6 +63,16 @@ export default {
     fontFamily: fonts.pacifico,
     fontSize: 20
   },
+  textHeader: {
+    dark: {
+      color: colors.white,
+      fontSize: 30
+    },
+    light: {
+      color: colors.darkColor,
+      fontSize: 30
+    }
+  },
 
   // spacers
   // ///////////////////////////////////////////////////////////////////////////
