@@ -18,6 +18,25 @@ const HomeScreen = ({ navigation, screenProps }) => {
         <View style={gStyle.spacer64} />
 
         <Touch
+          onPress={() =>
+            navigation.navigate(
+              'Auth',
+              {},
+              {
+                type: 'Navigate',
+                routeName: 'Auth',
+                action: {
+                  type: 'Navigate',
+                  routeName: 'SignInScreen',
+                  params: { source: 'App' }
+                }
+              }
+            )
+          }
+          text="Jump to SignIn screen"
+        />
+
+        <Touch
           onPress={() => navigation.navigate('MultiBase')}
           text="Jump to Multi tab"
         />

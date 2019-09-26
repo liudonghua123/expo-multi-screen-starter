@@ -30,6 +30,6 @@ const TabNavigator = createBottomTabNavigator(
   }
 );
 
-const App = createAppContainer(TabNavigator);
+// const App = createAppContainer(TabNavigator);
 
-export default App;
+export default TabNavigator;
