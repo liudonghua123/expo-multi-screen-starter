@@ -23,12 +23,7 @@
         ]
       }
     ],
-    "no-underscore-dangle": [
-      "error",
-      {
-        "allowAfterThis": true
-      }
-    ],
+    "no-underscore-dangle": 0,
     "no-unused-vars": 0,
     "react/no-unused-prop-types": 0,
     "import/no-extraneous-dependencies": 0,
