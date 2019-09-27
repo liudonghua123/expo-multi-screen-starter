@@ -10,15 +10,14 @@ import {
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
 import { ThemeContext } from 'react-navigation';
-import { gStyle } from '../constants';
-
-// components
-import Touch from '../components/Touch';
-
 // icons
 // https://expo.github.io/vector-icons/
 // https://react-native-training.github.io/react-native-elements/docs/button.html#title
 import { Ionicons } from '@expo/vector-icons';
+import { gStyle } from '../constants';
+
+// components
+import Touch from '../components/Touch';
 
 export default class SignInScreen extends Component {
   static navigationOptions = ({ navigation }) => {

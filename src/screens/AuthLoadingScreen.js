@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   ActivityIndicator,
   AsyncStorage,
@@ -15,7 +16,9 @@ export default class AuthLoadingScreen extends React.Component {
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
     const { navigation } = this.props;
-    await AsyncStorage.removeItem('userToken');
+    if (__DEV__) {
+      await AsyncStorage.removeItem('userToken');
+    }
     const userToken = await AsyncStorage.getItem('userToken');
 
     // This will switch to the App screen or Auth screen and this loading
@@ -33,3 +36,9 @@ export default class AuthLoadingScreen extends React.Component {
     );
   }
 }
+
+AuthLoadingScreen.propTypes = {
+  // required
+  navigation: PropTypes.object.isRequired,
+  screenProps: PropTypes.object.isRequired
+};
