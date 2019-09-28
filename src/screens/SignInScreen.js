@@ -23,8 +23,13 @@ export default class SignInScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     // can not get params from navigation
     // https://github.com/react-navigation/react-navigation/issues/143
-    const source = navigation.getParam('source', null);
-    console.info(`navigation: ${JSON.stringify(navigation)}`);
+    // const source = navigation.getParam('source', null);
+    // https://github.com/react-navigation/react-navigation/issues/6335#event-2668732246
+    const parent = navigation.dangerouslyGetParent();
+    let source = null;
+    if (parent && parent.state && parent.state.params) {
+      ({ source } = parent.state.params);
+    }
     let options = {
       headerTitle: 'SignIn'
     };

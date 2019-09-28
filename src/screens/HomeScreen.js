@@ -62,21 +62,7 @@ const HomeScreen = ({ navigation, screenProps }) => {
         </View>
 
         <Touch
-          onPress={() =>
-            navigation.navigate(
-              'Auth',
-              {},
-              {
-                type: 'Navigate',
-                routeName: 'Auth',
-                action: {
-                  type: 'Navigate',
-                  routeName: 'SignInScreen',
-                  params: { source: 'App' }
-                }
-              }
-            )
-          }
+          onPress={() => navigation.navigate('Auth', { source: 'App' })}
           text="Jump to SignIn screen"
         />
 
