@@ -7,7 +7,11 @@
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "version": "0.0.2",
-    "platforms": ["android", "ios", "web"],
+    "platforms": [
+      "android",
+      "ios",
+      "web"
+    ],
     "githubUrl": "https://github.com/calebnance/expo-multi-screen-starter",
     "orientation": "portrait",
     "primaryColor": "#2a2a2a",
@@ -20,13 +24,22 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["src/assets/**/*"],
+    "assetBundlePatterns": [
+      "src/assets/**/*"
+    ],
     "android": {
-      "versionCode": 2
+      "versionCode": 2,
+      "package": "com.liudonghua.demos.expo.login",
+      "publishBundlePath": "android\\app\\src\\main\\assets\\shell-app.bundle",
+      "publishManifestPath": "android\\app\\src\\main\\assets\\shell-app-manifest.json"
     },
     "ios": {
       "buildNumber": "0.0.2",
       "supportsTablet": true
+    },
+    "isDetached": true,
+    "detach": {
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.13.0-sdk35.0.0-b816b7af-88da-4ca9-87a5-7438f0c21b6e.tar.gz"
     }
   }
 }
