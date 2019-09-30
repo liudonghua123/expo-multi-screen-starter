@@ -1,0 +1,169 @@
+language: node_js
+node_js:
+  - 'lts/*'
+sudo: false
+branches:
+  only:
+  - master
+env:
+  global:
+  - EXPO_SDK_VERSION="35.0.0"
+  - TURTLE_VERSION="0.12.2"
+  - YARN_VERSION="1.19.0"
+jobs:
+  include:
+  - stage: publish app
+    env:
+    - CACHE_NAME=publish YARN_CACHE_FOLDER="/home/travis/yarn_cache"
+    cache:
+      directories:
+      - "$HOME/yarn_cache"
+    before_install:
+    - node -v
+    - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+    - export PATH="$HOME/.yarn/bin:$PATH"
+    - yarn config list -g
+    - yarn cache clean; rm -rf node_modules/ $HOME/yarn_cache/*
+    install:
+    - yarn global add expo-cli
+    script:
+    - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
+    - npm i
+    - expo publish
+  - stage: build android app
+    env:
+    - CACHE_NAME=build-android-v2 YARN_CACHE_FOLDER="/home/travis/yarn_cache"
+    jdk:
+    - openjdk8
+    cache:
+      directories:
+      - "$HOME/.turtle"
+      - "$HOME/yarn_cache"
+      - "$HOME/.gradle/wrapper"
+    before_install:
+    - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+    - export PATH="$HOME/.yarn/bin:$PATH"
+    install:
+    - pip install --user awscli
+    - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
+    script:
+    - export ARTIFACT_PATH="/home/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.apk"
+    - turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null || travis_terminate
+      1
+    - echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+    - base64 --decode expo-project.jks.base64 > expo-project.jks
+    - turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS
+      --type apk -o $ARTIFACT_PATH
+    deploy:
+      provider: releases
+      api_key:
+        secure: ogXjqeh0CtFwsuQ9t3zAfcuXxu6o+z7SmTnUd+jdVLDr3IbMmtkr3YXlpZqmgZZPDYkih/Rr2fhr3TV8UjE/Xy8VTVroo7kyhJGFraxN6b1+eVifuMPUzc+ECc4QclnBL6uhEORpD+urQPP4EtE3nXvlOmOCDI7rskUUfX+xow/XOEkbySLM79ZagDsBQ9KgL0ylWHoyJJKvYPwJ1PTElbtwr0PYWkSNhyUFCndg3+vnyMdlWDif5PeOvjh5mvVnUuNnF4ZW/Sizh0zMnSc+u4CWcG8voUbGygQBbb21iJ4Pjkvi41b4oZCdWI2x05Km8KuS6CKp17OQHVTR9fP/VeXX2XISJ9fWd7HckfvFkjgTl1KAYPwEKIik60X2bR2kXlXmitk0SrBcMnOKzj2vCgmXCZs/MGKhotuCnkVLepzaUlm+Ta2HbP7f/DVVi2Z6mox/iUMJwgSSwfKwr9HcifMvM/tzvEaEI0OK2NflmrqKpWBbdycbdvHkfkHFGtOnmELGs9xIOndx2kRXZdia7ZNahVx3zKTHl7V4ZZDgDXrKwJPPA3Lmfhqx0PzPza6oUOkKwA6aZUI6FjI7IGChnNHQwPQQqfzZ5HMZiK8ieVI+ka9SXOtELyB5r0M2BIOhvdDcKNWtlxnuvciK7lTpPY2jNbX8Ig8X8w2JscuHiZY=
+      file:
+      - "$ARTIFACT_PATH"
+      skip_cleanup: true
+      on:
+        repo: liudonghua123/expo-multi-screen-starter
+        tags: true
+  # - stage: build android aab
+  #   env:
+  #   - CACHE_NAME=build-android-v2 YARN_CACHE_FOLDER="/home/travis/yarn_cache"
+  #   jdk:
+  #   - openjdk8
+  #   cache:
+  #     directories:
+  #     - "$HOME/.turtle"
+  #     - "$HOME/yarn_cache"
+  #     - "$HOME/.gradle/wrapper"
+  #   before_install:
+  #   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+  #   - export PATH="$HOME/.yarn/bin:$PATH"
+  #   install:
+  #   - pip install --user awscli
+  #   - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
+  #   script:
+  #   - export ARTIFACT_PATH="/home/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.aab"
+  #   - turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null || travis_terminate
+  #     1
+  #   - echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+  #   - base64 --decode expo-project.jks.base64 > expo-project.jks
+  #   - turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS
+  #     --type app-bundle -o $ARTIFACT_PATH
+  #   deploy:
+  #     provider: releases
+  #     api_key:
+  #       secure: ogXjqeh0CtFwsuQ9t3zAfcuXxu6o+z7SmTnUd+jdVLDr3IbMmtkr3YXlpZqmgZZPDYkih/Rr2fhr3TV8UjE/Xy8VTVroo7kyhJGFraxN6b1+eVifuMPUzc+ECc4QclnBL6uhEORpD+urQPP4EtE3nXvlOmOCDI7rskUUfX+xow/XOEkbySLM79ZagDsBQ9KgL0ylWHoyJJKvYPwJ1PTElbtwr0PYWkSNhyUFCndg3+vnyMdlWDif5PeOvjh5mvVnUuNnF4ZW/Sizh0zMnSc+u4CWcG8voUbGygQBbb21iJ4Pjkvi41b4oZCdWI2x05Km8KuS6CKp17OQHVTR9fP/VeXX2XISJ9fWd7HckfvFkjgTl1KAYPwEKIik60X2bR2kXlXmitk0SrBcMnOKzj2vCgmXCZs/MGKhotuCnkVLepzaUlm+Ta2HbP7f/DVVi2Z6mox/iUMJwgSSwfKwr9HcifMvM/tzvEaEI0OK2NflmrqKpWBbdycbdvHkfkHFGtOnmELGs9xIOndx2kRXZdia7ZNahVx3zKTHl7V4ZZDgDXrKwJPPA3Lmfhqx0PzPza6oUOkKwA6aZUI6FjI7IGChnNHQwPQQqfzZ5HMZiK8ieVI+ka9SXOtELyB5r0M2BIOhvdDcKNWtlxnuvciK7lTpPY2jNbX8Ig8X8w2JscuHiZY=
+  #     file:
+  #     - "$ARTIFACT_PATH"
+  #     skip_cleanup: true
+  #     on:
+  #       repo: liudonghua123/expo-multi-screen-starter
+  #       tags: true
+  # - stage: build ios archive
+  #   os: osx
+  #   osx_image: xcode10.1
+  #   language: node_js
+  #   node_js: '8.12'
+  #   env:
+  #   - CACHE_NAME=build-ios-simulator YARN_CACHE_FOLDER="/Users/travis/yarn_cache"
+  #   cache:
+  #     directories:
+  #     - "$HOME/.turtle"
+  #     - "$HOME/yarn_cache"
+  #   before_install:
+  #   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+  #   - export PATH="$HOME/.yarn/bin:$PATH"
+  #   install:
+  #   - pip install --user awscli
+  #   - export PATH=/Users/travis/Library/Python/2.7/bin:$PATH
+  #   - yarn global add turtle-cli@$TURTLE_VERSION
+  #   script:
+  #   - export ARTIFACT_PATH="/Users/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.tar.gz"
+  #   - turtle setup:ios --sdk-version $EXPO_SDK_VERSION || travis_terminate 1
+  #   - turtle build:ios --team-id $EXPO_APPLE_TEAM_ID --type simulator -o $ARTIFACT_PATH
+  #   deploy:
+  #     provider: releases
+  #     api_key:
+  #       secure: ogXjqeh0CtFwsuQ9t3zAfcuXxu6o+z7SmTnUd+jdVLDr3IbMmtkr3YXlpZqmgZZPDYkih/Rr2fhr3TV8UjE/Xy8VTVroo7kyhJGFraxN6b1+eVifuMPUzc+ECc4QclnBL6uhEORpD+urQPP4EtE3nXvlOmOCDI7rskUUfX+xow/XOEkbySLM79ZagDsBQ9KgL0ylWHoyJJKvYPwJ1PTElbtwr0PYWkSNhyUFCndg3+vnyMdlWDif5PeOvjh5mvVnUuNnF4ZW/Sizh0zMnSc+u4CWcG8voUbGygQBbb21iJ4Pjkvi41b4oZCdWI2x05Km8KuS6CKp17OQHVTR9fP/VeXX2XISJ9fWd7HckfvFkjgTl1KAYPwEKIik60X2bR2kXlXmitk0SrBcMnOKzj2vCgmXCZs/MGKhotuCnkVLepzaUlm+Ta2HbP7f/DVVi2Z6mox/iUMJwgSSwfKwr9HcifMvM/tzvEaEI0OK2NflmrqKpWBbdycbdvHkfkHFGtOnmELGs9xIOndx2kRXZdia7ZNahVx3zKTHl7V4ZZDgDXrKwJPPA3Lmfhqx0PzPza6oUOkKwA6aZUI6FjI7IGChnNHQwPQQqfzZ5HMZiK8ieVI+ka9SXOtELyB5r0M2BIOhvdDcKNWtlxnuvciK7lTpPY2jNbX8Ig8X8w2JscuHiZY=
+  #     file:
+  #     - "$ARTIFACT_PATH"
+  #     skip_cleanup: true
+  #     on:
+  #       repo: liudonghua123/expo-multi-screen-starter
+  #       tags: true
+  # - stage: build ios simulator
+  #   os: osx
+  #   osx_image: xcode10.1
+  #   language: node_js
+  #   node_js: '8.12'
+  #   env:
+  #   - CACHE_NAME=build-ios-ipa YARN_CACHE_FOLDER="/Users/travis/yarn_cache"
+  #   cache:
+  #     directories:
+  #     - "$HOME/.turtle"
+  #     - "$HOME/yarn_cache"
+  #   before_install:
+  #   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+  #   - export PATH="$HOME/.yarn/bin:$PATH"
+  #   install:
+  #   - pip install --user awscli
+  #   - export PATH=/Users/travis/Library/Python/2.7/bin:$PATH
+  #   - yarn global add turtle-cli@$TURTLE_VERSION
+  #   script:
+  #   - export ARTIFACT_PATH="/Users/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.ipa"
+  #   - turtle setup:ios --sdk-version $EXPO_SDK_VERSION || travis_terminate 1
+  #   - echo $EXPO_IOS_DIST_P12_BASE64 > expo-project_dist.p12.base64
+  #   - base64 --decode expo-project_dist.p12.base64 > expo-project_dist.p12
+  #   - echo $EXPO_IOS_PROVISIONING_PROFILE_BASE64 > expo-project.mobileprovision.base64
+  #   - base64 --decode expo-project.mobileprovision.base64 > expo-project.mobileprovision
+  #   - turtle build:ios --team-id $EXPO_APPLE_TEAM_ID --dist-p12-path ./expo-project_dist.p12
+  #     --provisioning-profile-path ./expo-project.mobileprovision -o $ARTIFACT_PATH
+  #   deploy:
+  #     provider: releases
+  #     api_key:
+  #       secure: ogXjqeh0CtFwsuQ9t3zAfcuXxu6o+z7SmTnUd+jdVLDr3IbMmtkr3YXlpZqmgZZPDYkih/Rr2fhr3TV8UjE/Xy8VTVroo7kyhJGFraxN6b1+eVifuMPUzc+ECc4QclnBL6uhEORpD+urQPP4EtE3nXvlOmOCDI7rskUUfX+xow/XOEkbySLM79ZagDsBQ9KgL0ylWHoyJJKvYPwJ1PTElbtwr0PYWkSNhyUFCndg3+vnyMdlWDif5PeOvjh5mvVnUuNnF4ZW/Sizh0zMnSc+u4CWcG8voUbGygQBbb21iJ4Pjkvi41b4oZCdWI2x05Km8KuS6CKp17OQHVTR9fP/VeXX2XISJ9fWd7HckfvFkjgTl1KAYPwEKIik60X2bR2kXlXmitk0SrBcMnOKzj2vCgmXCZs/MGKhotuCnkVLepzaUlm+Ta2HbP7f/DVVi2Z6mox/iUMJwgSSwfKwr9HcifMvM/tzvEaEI0OK2NflmrqKpWBbdycbdvHkfkHFGtOnmELGs9xIOndx2kRXZdia7ZNahVx3zKTHl7V4ZZDgDXrKwJPPA3Lmfhqx0PzPza6oUOkKwA6aZUI6FjI7IGChnNHQwPQQqfzZ5HMZiK8ieVI+ka9SXOtELyB5r0M2BIOhvdDcKNWtlxnuvciK7lTpPY2jNbX8Ig8X8w2JscuHiZY=
+  #     file:
+  #     - "$ARTIFACT_PATH"
+  #     skip_cleanup: true
+  #     on:
+  #       repo: liudonghua123/expo-multi-screen-starter
+  #       tags: true
