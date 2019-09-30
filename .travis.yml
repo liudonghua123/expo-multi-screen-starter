@@ -1,4 +1,4 @@
-language: node_js
+language: java
 node_js:
   - 'lts/*'
 sudo: false
@@ -45,17 +45,22 @@ jobs:
     - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
     - export PATH="$HOME/.yarn/bin:$PATH"
     install:
-    - pip install --user awscli
     - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
     script:
     - export ARTIFACT_PATH="/home/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.apk"
     - turtle setup:android --sdk-version $EXPO_SDK_VERSION 
-    - echo $EXPO_ANDROID_KEY_PASSWORD
-    - echo $EXPO_ANDROID_KEYSTORE_BASE64
-    - echo $EXPO_ANDROID_KEYSTORE_ALIAS
-    - echo $EXPO_ANDROID_KEYSTORE_BASE64
-    - echo $EXPO_ANDROID_KEYSTORE_PASSWORD
+    - echo $EXPO_ANDROID_KEY_PASSWORD > tmp.txt
+    - cat tmp.txt
+    - echo $EXPO_ANDROID_KEYSTORE_BASE64 > tmp.txt
+    - cat tmp.txt
+    - echo $EXPO_ANDROID_KEYSTORE_ALIAS > tmp.txt
+    - cat tmp.txt
+    - echo $EXPO_ANDROID_KEYSTORE_BASE64 > tmp.txt
+    - cat tmp.txt
+    - echo $EXPO_ANDROID_KEYSTORE_PASSWORD > tmp.txt
+    - cat tmp.txt
     - echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+    - cat expo-project.jks.base64
     - base64 --decode expo-project.jks.base64 > expo-project.jks
     - cat expo-project.jks
     - turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type apk -o $ARTIFACT_PATH
