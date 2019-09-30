@@ -23,6 +23,7 @@ jobs:
     - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
     - export PATH="$HOME/.yarn/bin:$PATH"
     - yarn config list -g
+    - yarn cache clean; rm -rf node_modules/ $HOME/yarn_cache/*
     install:
     - yarn global add expo-cli
     script:
