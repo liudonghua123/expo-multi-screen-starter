@@ -28,7 +28,7 @@ jobs:
     - yarn global add expo-cli
     script:
     - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
-    - yarn
+    - npm i
     - expo publish
   - stage: build android app
     env:
