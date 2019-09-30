@@ -10,6 +10,7 @@ env:
   - EXPO_SDK_VERSION="35.0.0"
   - TURTLE_VERSION="0.12.2"
   - YARN_VERSION="1.19.0"
+cache: npm
 jobs:
   include:
   - stage: publish app
