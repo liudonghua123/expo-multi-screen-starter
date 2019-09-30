@@ -50,10 +50,15 @@ jobs:
     script:
     - export ARTIFACT_PATH="/home/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.apk"
     - turtle setup:android --sdk-version $EXPO_SDK_VERSION 
+    - echo $EXPO_ANDROID_KEY_PASSWORD
+    - echo $EXPO_ANDROID_KEYSTORE_BASE64
+    - echo $EXPO_ANDROID_KEYSTORE_ALIAS
+    - echo $EXPO_ANDROID_KEYSTORE_BASE64
+    - echo $EXPO_ANDROID_KEYSTORE_PASSWORD
     - echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
     - base64 --decode expo-project.jks.base64 > expo-project.jks
-    - turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS
-      --type apk -o $ARTIFACT_PATH
+    - cat expo-project.jks
+    - turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type apk -o $ARTIFACT_PATH
     deploy:
       provider: releases
       api_key:
