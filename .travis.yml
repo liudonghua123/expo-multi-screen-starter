@@ -47,8 +47,6 @@ jobs:
     install:
     - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
     script:
-    - export ARTIFACT_PATH="/home/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.apk"
-    - turtle setup:android --sdk-version $EXPO_SDK_VERSION 
     - echo $EXPO_ANDROID_KEY_PASSWORD > tmp.txt
     - cat tmp.txt
     - echo $EXPO_ANDROID_KEYSTORE_BASE64 > tmp.txt
@@ -63,6 +61,9 @@ jobs:
     - cat expo-project.jks.base64
     - base64 --decode expo-project.jks.base64 > expo-project.jks
     - cat expo-project.jks
+    - export ARTIFACT_PATH="/home/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.apk"
+    - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
+    - turtle setup:android --sdk-version $EXPO_SDK_VERSION 
     - turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type apk -o $ARTIFACT_PATH
     deploy:
       provider: releases
