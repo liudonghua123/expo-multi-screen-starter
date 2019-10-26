@@ -8,7 +8,7 @@ branches:
 env:
   global:
   - EXPO_SDK_VERSION="35.0.0"
-  - TURTLE_VERSION="0.12.2"
+  - TURTLE_VERSION="0.12.7"
   - YARN_VERSION="1.19.0"
 cache: npm
 jobs:
