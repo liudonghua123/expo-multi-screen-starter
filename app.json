@@ -22,11 +22,16 @@
     },
     "assetBundlePatterns": ["src/assets/**/*"],
     "android": {
+      "package": "com.expo.turtle.cli.example",
       "versionCode": 2
     },
     "ios": {
-      "buildNumber": "0.0.2",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.expo.turtle.cli.example",
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "buildNumber": "0.0.2"
     }
   }
 }
