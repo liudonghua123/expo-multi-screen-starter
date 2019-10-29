@@ -2,9 +2,6 @@ language: java
 node_js:
   - 'lts/*'
 sudo: false
-branches:
-  only:
-  - master
 env:
   global:
   - EXPO_SDK_VERSION="35.0.0"
