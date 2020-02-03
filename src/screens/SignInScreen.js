@@ -8,7 +8,8 @@ import {
   ScrollView,
   AsyncStorage
 } from 'react-native';
-import { Input, Button, Icon } from 'react-native-elements';
+import { Input, Icon } from 'react-native-elements';
+import { Button } from 'react-native-paper';
 import { ThemeContext } from 'react-navigation';
 // icons
 // https://expo.github.io/vector-icons/
@@ -39,7 +40,6 @@ export default class SignInScreen extends Component {
         headerLeft: (
           <Button
             onPress={() => navigation.navigate('App')}
-            type="clear"
             icon={<Ionicons name="ios-arrow-dropleft-circle" size={24} />}
           />
         )
@@ -96,21 +96,22 @@ export default class SignInScreen extends Component {
               />
 
               <Button
-                title="LOG IN"
-                onPress={this.doLogin}
-                loading={showLoading}
-                loadingProps={{ size: 'small', color: 'white' }}
-                buttonStyle={{
-                  height: 50,
-                  width: 320,
+                style={{
                   borderRadius: 30
                 }}
-                containerStyle={{ marginVertical: 10 }}
-                titleStyle={{
+                contentStyle={{
+                  width: 320,
+                  height: 50
+                }}
+                labelStyle={{
                   fontWeight: 'bold',
                   color: 'white'
                 }}
-              />
+                mode="contained"
+                onPress={this.doLogin}
+              >
+                LOG IN
+              </Button>
             </ScrollView>
           </View>
         )}

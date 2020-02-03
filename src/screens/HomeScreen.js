@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, Text, View, Image, Button } from 'react-native';
+import { ScrollView, Text, View, Image } from 'react-native';
+import { Button } from 'react-native-paper';
 import { useTheme } from 'react-navigation';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
@@ -50,9 +51,16 @@ const HomeScreen = ({ navigation, screenProps }) => {
         <View style={gStyle.spacer64} />
 
         <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'grey'
+          }}
         >
-          <Button title="Pick an image from camera roll" onPress={_pickImage} />
+          <Button icon="camera" mode="contained" onPress={_pickImage}>
+            Pick an image from camera roll
+          </Button>
           {image && (
             <Image
               source={{ uri: image }}
@@ -61,24 +69,27 @@ const HomeScreen = ({ navigation, screenProps }) => {
           )}
         </View>
 
-        <Touch
+        <Button
+          mode="contained"
           onPress={() => navigation.navigate('Auth', { source: 'App' })}
-          text="Jump to SignIn screen"
-        />
+        >
+          Jump to SignIn screen
+        </Button>
 
-        <Touch
+        <Button
+          mode="contained"
           onPress={() => navigation.navigate('MultiBase')}
-          text="Jump to Multi tab"
-        />
+        >
+          Jump to Multi tab
+        </Button>
 
-        <Touch
-          onPress={() => screenProps.updateTheme('light')}
-          text="Light theme"
-        />
-        <Touch
-          onPress={() => screenProps.updateTheme('dark')}
-          text="Dark theme"
-        />
+        <Button mode="contained" onPress={() => screenProps.updateTheme(false)}>
+          Light theme
+        </Button>
+
+        <Button mode="contained" onPress={() => screenProps.updateTheme(true)}>
+          Dark theme
+        </Button>
       </ScrollView>
     </View>
   );

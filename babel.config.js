@@ -1,3 +1,4 @@
+// eslint-disable-next-line func-names
 module.exports = function(api) {
   const presets = ['babel-preset-expo'];
   const plugins = [];
@@ -10,5 +11,13 @@ module.exports = function(api) {
 
   api.cache(true);
 
-  return { presets, plugins };
+  return {
+    presets,
+    plugins,
+    env: {
+      production: {
+        plugins: ['react-native-paper/babel']
+      }
+    }
+  };
 };
