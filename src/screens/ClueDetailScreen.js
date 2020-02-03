@@ -6,11 +6,13 @@ import {
   Text,
   View,
   Button,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import { useTheme, ThemeContext } from 'react-navigation';
 import { List } from 'react-native-paper';
 import { Audio, Video } from 'expo-av';
+import VideoPlayer from 'react-native-video-controls';
 import { gStyle } from '../constants';
 import config from '../../config';
 import defaultImage from '../assets/splash.png';
@@ -20,6 +22,10 @@ class ClueDetailScreen extends Component {
     item: {},
     itemfj: []
   };
+
+  _isPlayings = {};
+
+  _videos = {};
 
   loadData = async () => {
     // 获取数据
@@ -39,9 +45,35 @@ class ClueDetailScreen extends Component {
     await this.loadData();
   }
 
-  _mountVideo = component => {
-    this._video = component;
-    // this._video.pauseAsync();
+  _mountVideo = multiMediaSource => component => {
+    if (component) {
+      console.info(`this._videos ${this._videos}, ${this}`);
+      this._videos[multiMediaSource] = component;
+      console.info(
+        `_mountVideo[${multiMediaSource}] ${multiMediaSource} ${component}`
+      );
+    }
+  };
+
+  togglePlay = multiMediaSource => e => {
+    const { _videos, _isPlayings } = this;
+    const player = _videos[multiMediaSource];
+    const isPlaying = _isPlayings[player];
+    console.info(`togglePlay[${multiMediaSource}] ${player} ${isPlaying}`);
+    if (isPlaying) {
+      player.pauseAsync();
+    } else {
+      player.playAsync();
+    }
+  };
+
+  _onPlaybackStatusUpdate = multiMediaSource => status => {
+    const { _videos } = this;
+    const player = _videos[multiMediaSource];
+    console.info(
+      `_onPlaybackStatusUpdate[${multiMediaSource}] ${player} ${status.isPlaying}`
+    );
+    this._isPlayings[player] = status.isPlaying;
   };
 
   render() {
@@ -72,28 +104,57 @@ class ClueDetailScreen extends Component {
                     let multiMedia = null;
                     if (item.wjfwxdlj.endsWith('.mp3')) {
                       multiMedia = (
-                        <Text style={{ width: 100, height: 100 }}>
-                          Audio Todo
-                        </Text>
+                        <TouchableOpacity
+                          onPress={this.togglePlay(multiMediaSource)}
+                        >
+                          <Image
+                            source={defaultImage}
+                            style={{ width: 100, height: 100 }}
+                          />
+                          <Video
+                            source={{ uri: multiMediaSource }}
+                            ref={this._mountVideo(multiMediaSource)}
+                            onPlaybackStatusUpdate={this._onPlaybackStatusUpdate(
+                              multiMediaSource
+                            )}
+                            audioOnly
+                            rate={1.0}
+                            volume={1.0}
+                            isMuted={false}
+                            resizeMode="cover"
+                            shouldPlay={false}
+                            isLooping
+                            style={{ width: 0, height: 0 }}
+                          />
+                        </TouchableOpacity>
                       );
                     } else if (item.wjfwxdlj.endsWith('.mp4')) {
                       multiMedia = (
-                        <Video
-                          ref={this._mountVideo}
-                          source={{ uri: multiMediaSource }}
-                          rate={1.0}
-                          volume={1.0}
-                          isMuted={false}
-                          resizeMode="cover"
-                          shouldPlay
-                          isLooping
-                          style={{ width: 100, height: 100 }}
-                        />
+                        <TouchableOpacity
+                          onPress={this.togglePlay(multiMediaSource)}
+                        >
+                          <Video
+                            source={{ uri: multiMediaSource }}
+                            ref={this._mountVideo(multiMediaSource)}
+                            onPlaybackStatusUpdate={this._onPlaybackStatusUpdate(
+                              multiMediaSource
+                            )}
+                            rate={1.0}
+                            volume={1.0}
+                            isMuted={false}
+                            resizeMode="cover"
+                            shouldPlay={false}
+                            isLooping
+                            style={{ width: 100, height: 100 }}
+                          />
+                        </TouchableOpacity>
                       );
                     } else {
                       multiMedia = (
                         <Image
-                          source={multiMediaSource}
+                          source={
+                            item.wjfwxdlj ? multiMediaSource : defaultImage
+                          }
                           style={{ width: 100, height: 100 }}
                         />
                       );
