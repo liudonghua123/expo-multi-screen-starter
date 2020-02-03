@@ -6,7 +6,8 @@ import {
   Text,
   View,
   Button,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import { useTheme, ThemeContext } from 'react-navigation';
 import { List } from 'react-native-paper';
@@ -47,23 +48,26 @@ class ClueScreen extends Component {
             <List.Section style={{ alignSelf: 'stretch' }}>
               <List.Subheader></List.Subheader>
               {items.map((item, index) => (
-                <List.Item
-                  title={item.xsbt}
-                  description={item.xsxq}
-                  onPress={() => navigation.navigate('ClueDetail')}
-                  left={props => {
-                    const imageSource = item.swxsfmt
-                      ? `${config.server}${item.swxsfmt}`
-                      : defaultImage;
-                    console.info(`load image ${imageSource}`);
-                    return (
-                      <Image
-                        source={imageSource}
-                        style={{ width: 50, height: 50 }}
-                      />
-                    );
-                  }}
-                />
+                <TouchableOpacity>
+                  <List.Item
+                    title={item.xsbt}
+                    description={item.xsxq}
+                    onPress={() => navigation.navigate('ClueDetail')}
+                    left={props => {
+                      const imageSource = item.swxsfmt
+                        ? `${config.server}${item.swxsfmt}`
+                        : defaultImage;
+                      console.info(`load image ${imageSource}`);
+                      return (
+                        <Image
+                          source={imageSource}
+                          style={{ width: 50, height: 50 }}
+                        />
+                      );
+                    }}
+                    style={{ alignSelf: 'stretch' }}
+                  />
+                </TouchableOpacity>
               ))}
             </List.Section>
           </ScrollView>
