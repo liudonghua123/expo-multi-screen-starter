@@ -18,7 +18,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "web-build": "expo build:web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "mock": "umi-serve"
   },
   "dependencies": {
     "expo": "^36.0.0",
@@ -52,7 +53,8 @@
     "eslint-plugin-jsx-a11y": "^6.2.2",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.2",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "umi-serve": "^1.9.8"
   },
   "private": true,
   "prettier": {
