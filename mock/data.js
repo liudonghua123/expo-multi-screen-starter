@@ -1,3 +1,6 @@
+import { join } from 'path';
+import url from 'url';
+import { existsSync } from 'fs';
 import list from './list.json';
 import item from './item.json';
 import itemfj from './itemfj.json';
@@ -23,5 +26,16 @@ export default {
 
   '/asjyj/findVQbSwxszbfjStr.do': (req, res) => {
     res.json(itemfj);
+  },
+
+  '/FJ/*': (req, res) => {
+    const path = url.parse(req.url).pathname;
+    console.info(`request url ${path}`);
+    const filePath = join(__dirname, path);
+    if (existsSync(filePath)) {
+      res.sendFile(filePath);
+    } else {
+      res.sendFile(join(__dirname, 'default.png'));
+    }
   }
 };

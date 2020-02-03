@@ -3825,6 +3825,14 @@ expo-asset@~8.0.0:
     path-browserify "^1.0.0"
     url-parse "^1.4.4"
 
+expo-av@~8.0.0:
+  version "8.0.0"
+  resolved "http://r.cnpmjs.org/expo-av/download/expo-av-8.0.0.tgz#fc892a0e4ff7e1eff630002e0652da3125d18113"
+  integrity sha1-/IkqDk/34e/2MAAuBlLaMSXRgRM=
+  dependencies:
+    lodash "^4.17.15"
+    nullthrows "^1.1.0"
+
 expo-constants@~8.0.0:
   version "8.0.0"
   resolved "http://r.cnpmjs.org/expo-constants/download/expo-constants-8.0.0.tgz#e2c5a072dacb4263ccfc57dcb4835ca791960d48"

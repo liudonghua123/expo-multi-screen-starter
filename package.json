@@ -24,6 +24,7 @@
   "dependencies": {
     "expo": "^36.0.0",
     "expo-asset": "~8.0.0",
+    "expo-av": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-image-picker": "~8.0.1",
     "prop-types": "^15.7.2",
