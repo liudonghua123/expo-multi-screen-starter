@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useTheme, ThemeContext } from 'react-navigation';
 import { List } from 'react-native-paper';
+import { ImageLoader } from 'react-native-image-fallback';
 import { gStyle } from '../constants';
 import config from '../../config';
 import defaultImage from '../assets/splash.png';
@@ -54,13 +55,12 @@ class ClueScreen extends Component {
                     description={item.xsxq}
                     onPress={() => navigation.navigate('ClueDetail')}
                     left={props => {
-                      const imageSource = item.swxsfmt
-                        ? `${config.server}${item.swxsfmt}`
-                        : defaultImage;
+                      const imageSource = `${config.server}${item.swxsfmt}`;
                       console.info(`load image ${imageSource}`);
                       return (
-                        <Image
+                        <ImageLoader
                           source={imageSource}
+                          fallback={defaultImage}
                           style={{ width: 50, height: 50 }}
                         />
                       );

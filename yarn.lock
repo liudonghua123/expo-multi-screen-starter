@@ -6696,6 +6696,13 @@ react-native-gesture-handler@~1.5.0:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-image-fallback@^0.1.1:
+  version "0.1.1"
+  resolved "http://r.cnpmjs.org/react-native-image-fallback/download/react-native-image-fallback-0.1.1.tgz#9b2d1878cbcd1a965b622e261506dca3f2a8fef4"
+  integrity sha1-my0YeMvNGpZbYi4mFQbco/Ko/vQ=
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-paper@^3.5.1:
   version "3.5.1"
   resolved "http://r.cnpmjs.org/react-native-paper/download/react-native-paper-3.5.1.tgz#1fac594d1cfdb2bb9bce37bdd48c09a1f4aed3cb"

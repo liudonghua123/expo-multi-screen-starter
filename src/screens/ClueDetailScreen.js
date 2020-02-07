@@ -12,7 +12,7 @@ import {
 import { useTheme, ThemeContext } from 'react-navigation';
 import { List } from 'react-native-paper';
 import { Audio, Video } from 'expo-av';
-import VideoPlayer from 'react-native-video-controls';
+import { ImageLoader } from 'react-native-image-fallback';
 import { gStyle } from '../constants';
 import config from '../../config';
 import defaultImage from '../assets/splash.png';
@@ -151,10 +151,9 @@ class ClueDetailScreen extends Component {
                       );
                     } else {
                       multiMedia = (
-                        <Image
-                          source={
-                            item.wjfwxdlj ? multiMediaSource : defaultImage
-                          }
+                        <ImageLoader
+                          source={multiMediaSource}
+                          fallback={defaultImage}
                           style={{ width: 100, height: 100 }}
                         />
                       );
