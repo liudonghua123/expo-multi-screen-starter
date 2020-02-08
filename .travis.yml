@@ -1,6 +1,6 @@
 language: java
 node_js:
-  - "lts/*"
+  - 'lts/*'
 sudo: false
 branches:
   only:
@@ -18,7 +18,7 @@ jobs:
         - CACHE_NAME=publish YARN_CACHE_FOLDER="/home/travis/yarn_cache"
       cache:
         directories:
-          - "$HOME/yarn_cache"
+          - '$HOME/yarn_cache'
       before_install:
         - node -v
         - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
@@ -30,7 +30,8 @@ jobs:
         - yarn global add expo-cli
         - ls -l
         - cat package.json
-        - npm install
+        - rm yarn.lock
+        - yarn install
       script:
         - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
         - expo publish
@@ -41,16 +42,17 @@ jobs:
         - openjdk8
       cache:
         directories:
-          - "$HOME/.turtle"
-          - "$HOME/yarn_cache"
-          - "$HOME/.gradle/wrapper"
+          - '$HOME/.turtle'
+          - '$HOME/yarn_cache'
+          - '$HOME/.gradle/wrapper'
       before_install:
         - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
         - export PATH="$HOME/.yarn/bin:$PATH"
         - rm -rf ./yarn-offline-mirror
       install:
         - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
-        - npm install
+        - rm yarn.lock
+        - yarn install
       script:
         - echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
         - base64 --decode expo-project.jks.base64 > expo-project.jks
@@ -62,7 +64,7 @@ jobs:
         api_key:
           secure: ogXjqeh0CtFwsuQ9t3zAfcuXxu6o+z7SmTnUd+jdVLDr3IbMmtkr3YXlpZqmgZZPDYkih/Rr2fhr3TV8UjE/Xy8VTVroo7kyhJGFraxN6b1+eVifuMPUzc+ECc4QclnBL6uhEORpD+urQPP4EtE3nXvlOmOCDI7rskUUfX+xow/XOEkbySLM79ZagDsBQ9KgL0ylWHoyJJKvYPwJ1PTElbtwr0PYWkSNhyUFCndg3+vnyMdlWDif5PeOvjh5mvVnUuNnF4ZW/Sizh0zMnSc+u4CWcG8voUbGygQBbb21iJ4Pjkvi41b4oZCdWI2x05Km8KuS6CKp17OQHVTR9fP/VeXX2XISJ9fWd7HckfvFkjgTl1KAYPwEKIik60X2bR2kXlXmitk0SrBcMnOKzj2vCgmXCZs/MGKhotuCnkVLepzaUlm+Ta2HbP7f/DVVi2Z6mox/iUMJwgSSwfKwr9HcifMvM/tzvEaEI0OK2NflmrqKpWBbdycbdvHkfkHFGtOnmELGs9xIOndx2kRXZdia7ZNahVx3zKTHl7V4ZZDgDXrKwJPPA3Lmfhqx0PzPza6oUOkKwA6aZUI6FjI7IGChnNHQwPQQqfzZ5HMZiK8ieVI+ka9SXOtELyB5r0M2BIOhvdDcKNWtlxnuvciK7lTpPY2jNbX8Ig8X8w2JscuHiZY=
         file:
-          - "$ARTIFACT_PATH"
+          - '$ARTIFACT_PATH'
         skip_cleanup: true
         on:
           repo: liudonghua123/expo-multi-screen-starter
