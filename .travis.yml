@@ -28,7 +28,9 @@ jobs:
         - rm -rf ./yarn-offline-mirror
       install:
         - yarn global add expo-cli
-        - yarn install
+        - ls -l
+        - cat package.json
+        - npm install
       script:
         - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
         - expo publish
@@ -48,7 +50,7 @@ jobs:
         - rm -rf ./yarn-offline-mirror
       install:
         - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
-        - yarn install
+        - npm install
       script:
         - echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
         - base64 --decode expo-project.jks.base64 > expo-project.jks
