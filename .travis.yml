@@ -31,7 +31,7 @@ jobs:
         - ls -l
         - cat package.json
         - rm yarn.lock
-        - yarn install
+        - yarn install --verbose
       script:
         - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
         - expo publish
@@ -52,7 +52,7 @@ jobs:
       install:
         - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
         - rm yarn.lock
-        - yarn install
+        - yarn install --verbose
       script:
         - echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
         - base64 --decode expo-project.jks.base64 > expo-project.jks
